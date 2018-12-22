@@ -28,6 +28,15 @@ class Node():
 				go = GameObject(o, name=key)
 				self.objects.append(go)
 
+	def findObjectByName(self, name):
+		name = name.lower()
+
+		for obj in self.objects:
+			if(obj.name == name):
+				return obj
+				
+		return None
+
 class GameObject():
 	def __init__(self,json, name='Ordinary  Object'):
 		super(GameObject, self).__init__()
