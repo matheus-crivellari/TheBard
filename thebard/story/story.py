@@ -9,6 +9,9 @@ class Story():
 			paragraph = Node(n)
 			self.nodes.append(paragraph)
 
+	def setVar(self,lhs,rhs):
+		self.variables[lhs] = rhs
+
 class Node():
 	def __init__(self, paragraph_json):
 		super(Node, self).__init__()
@@ -43,3 +46,4 @@ class GameObject():
 		self.name = name
 		self.look = json['look'] if 'look' in json else None
 		self.pick = json['pick'] if 'pick' in json else None
+		self.open = json['open'] if 'open' in json else None

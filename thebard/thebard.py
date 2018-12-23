@@ -9,14 +9,15 @@ class TheBard():
 	def __init__(self, path=''):
 		super(TheBard, self).__init__()
 		self.path 		= path
-		file 			= open (self.path, 'r')
-		self.raw 		= file.read()
-		self.json 		= json.loads(self.raw)
+		if self.path:
+			file 			= open (self.path, 'r')
+			self.raw 		= file.read()
+			self.json 		= json.loads(self.raw)
 
-		self.story = Story()
-		self.story.parse(self.json)
-		self.gameLoop = False
+			self.story = Story()
+			self.story.parse(self.json)
 
+		self.gameLoop 	 = False
 		self.currentNode = 0
 
 	def start(self):
@@ -69,7 +70,10 @@ class TheBard():
 			'pick' 		: self.commandNotImplementedYet,
 			'attack' 	: self.commandNotImplementedYet,
 			'open' 		: self.commandNotImplementedYet,
-			'quit' 		: self.end
+			'quit' 		: self.end,
+
+			# Commands for testing and debug
+			'reload' 	: self.reload
 		}
 
 		func = switcher.get(command[0], self.commandNotImplementedYet)
@@ -77,6 +81,19 @@ class TheBard():
 			func(command[1:])
 		else:
 			func()
+
+	def reload(self):
+		file 			= open (self.path, 'r')
+		self.raw 		= file.read()
+		self.json 		= json.loads(self.raw)
+
+		self.story = Story()
+		self.story.parse(self.json)
+		self.prompt()
+
+	def open(self, argArray=[]):
+		node = self.story.nodes[self.currentNode]
+		
 
 	def look(self, argArray=[]):
 		node = self.story.nodes[self.currentNode]
@@ -87,15 +104,15 @@ class TheBard():
 
 				if(item is not None):
 					if(item.look is not None):
-						if(item.look.narrative is not None):
-							self.tell(item.look.narrative)
+						if('narrative' in item.look):
+							self.resolve(item.look)
 						else:
 							self.tell([
-								"There's nothing special about {}.".format(itemName)
+								"There's nothing special about {}. A".format(itemName)
 							])
 					else:
 						self.tell([
-							"There's nothing special about {}.".format(itemName)
+							"There's nothing special about {}. B".format(itemName)
 						])
 				else:
 					self.tell([
@@ -127,17 +144,63 @@ class TheBard():
 		userInput = input('>>> ')
 		self.command(userInput)
 
-	def resolve(self,obj):
-		if('narrative' in obj):
-			self.tell(narrative=obj['narrative'])
+	@staticmethod
+	def eval(self,obj):
+		lhs = obj[0]
+		op  = obj[1]
+		rhs = obj[2]
 
+		if op == '=':
+			self.story.setVar(lhs,rhs)
+		elif op == '==':
+			if lhs in self.story.variables:
+				return self.story.variables[lhs] == rhs
+			else:
+				return False
+		elif op == '>':
+			if lhs in self.story.variables:
+				if isinstance(self.story.variables[lhs], (int, float, complex)):
+					return self.story.variables[lhs] > rhs
+				else:
+					return False
+			else:
+				return False
+		elif op == '<':
+			if lhs in self.story.variables:
+				if isinstance(self.story.variables[lhs], (int, float, complex)):
+					return self.story.variables[lhs] < rhs
+				else:
+					return False
+			else:
+				return False
+		elif op == '>=':
+			if lhs in self.story.variables:
+				if isinstance(self.story.variables[lhs], (int, float, complex)):
+					return self.story.variables[lhs] >= rhs
+				else:
+					return False
+			else:
+				return False
+		elif op == '<=':
+			if lhs in self.story.variables:
+				if isinstance(self.story.variables[lhs], (int, float, complex)):
+					return self.story.variables[lhs] <= rhs
+				else:
+					return False
+			else:
+				return False
+
+	def resolve(self,obj):
 		if('eval' in obj):
 			# TO-DO
 			pass
-
+		
 		if('if' in obj):
 			cr = Resolver(obj['if'])
 			cr.resolve(self)
+		
+		if('narrative' in obj):
+			self.tell(narrative=obj['narrative'])
 
 		if('lateIf' in obj):
 			cr = Resolver(obj['if'])
