@@ -17,11 +17,12 @@ class Node():
 		super(Node, self).__init__()
 		
 		# Preload of raw json before initializing classes
-		self.id 		 	= paragraph_json['id'] if 'id' in paragraph_json else None
-		self.narrative 	 	= paragraph_json['narrative'] if 'narrative' in paragraph_json else None
-		self.look 	 		= paragraph_json['look'] if 'look' in paragraph_json else None
-		self._objects_raw 	= paragraph_json['objects'] if 'objects' in paragraph_json else None
-		self._npcs_raw 	 	= paragraph_json['npcs'] if 'npcs' in paragraph_json else None
+		self.id 		 	= paragraph_json['id'] 			if 'id' 		in paragraph_json else None
+		self.narrative 	 	= paragraph_json['narrative'] 	if 'narrative' 	in paragraph_json else None
+		self.look 	 		= paragraph_json['look'] 		if 'look' 		in paragraph_json else None
+		self.pick 	 		= paragraph_json['pick'] 		if 'pick' 		in paragraph_json else None
+		self._objects_raw 	= paragraph_json['objects'] 	if 'objects' 	in paragraph_json else None
+		self._npcs_raw 	 	= paragraph_json['npcs'] 		if 'npcs' 		in paragraph_json else None
 
 		# Initializing classes
 		self.objects = []
