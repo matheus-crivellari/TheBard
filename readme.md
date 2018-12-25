@@ -6,11 +6,36 @@ TheBard is a command line application able to read a specific-formatted JSON fil
 
 A content-maker structures a json file using easy commands and his/her screenplay habilities to tell an interactive story. It's possible to define variables and check them in order to make non-linear storylines.
 
-## Test
+## Testing
+This game engine only works in console/terminal so far.
+
 ### Requirements
 - The only requirement is [Python 3.7](https://www.python.org/downloads/release/python-372/) installed
+
+- Optional requirement is [`pipenv`](https://pipenv.readthedocs.io/en/latest/).
 
 ### How to test
 1. Clone this repository
 
-        
+        git clone https://github.com/matheus-crivellari/TheBard.git thebard
+
+2. Run the project 
+
+        cd thebard
+        python run.py
+
+## Roadmap
+### Done
+- Player command `look <ambient>|<object>`;
+- Player command `pick <object>`;
+- Player command `quit`;
+### TO-DO
+- Player command `use <object> <object>`;
+- Player command `wear <wearable>`;
+- Player command `attack <object>`;
+- Player command `open <door>|<object>`;
+- Turn-based combat game logic;
+- Leveling system;
+- Multiplayer gameplay;
+- Equipment and buff enhancement system;
+- Consumable item consuming system.
